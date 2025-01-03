@@ -13,6 +13,7 @@ import eeet2582.week3.applicant.internal.dtos.InternalApplicantDTO;
 import eeet2582.week3.applicant.repository.ApplicantRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -36,11 +37,17 @@ class ApplicantService implements InternalApplicantInterface, ExternalApplicantI
         return new InternalApplicantDTO(savedApplicant);
     }
 
-    public Optional<List<InternalApplicantDTO>> getAllApplicants() {
+    public Page<InternalApplicantDTO> getAllApplicants(int pageNo, int pageSize) {
 
-        return Optional.of(destRepository.findAll().stream().map(InternalApplicantDTO::new)
-                .collect(Collectors.toList()));
-       
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("name").ascending());
+
+        Page<Applicant> applicantsPage = destRepository.findAll(pageable);
+
+        List<InternalApplicantDTO> applicantDTOList = applicantsPage.getContent().stream()
+                .map(InternalApplicantDTO::new)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(applicantDTOList, pageable, applicantsPage.getTotalElements());
     }
 
     public Optional<InternalApplicantDTO> updateApplicant(Applicant customerData) {

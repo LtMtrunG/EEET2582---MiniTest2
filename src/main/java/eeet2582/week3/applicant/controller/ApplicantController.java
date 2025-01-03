@@ -8,17 +8,10 @@ import eeet2582.week3.applicant.internal.InternalApplicantInterface;
 import eeet2582.week3.applicant.internal.dtos.CreateApplicantDTO;
 import eeet2582.week3.applicant.internal.dtos.InternalApplicantDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/applicant")
@@ -29,17 +22,15 @@ class ApplicantController {
   private InternalApplicantInterface internalApplicantInterface;
 
   @GetMapping
-  ResponseEntity<List<InternalApplicantDTO>> getAllApplicants() {
-    Optional<List<InternalApplicantDTO>> customers = internalApplicantInterface.getAllApplicants();
+  ResponseEntity<Page<InternalApplicantDTO>> getAllApplicants(@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+                                                              @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
+    Page<InternalApplicantDTO> customers = internalApplicantInterface.getAllApplicants(pageNo, pageSize);
 
-    if (!customers.isPresent()) {
-      return new ResponseEntity<List<InternalApplicantDTO>>(HttpStatus.NOT_FOUND);
+    if (!customers.hasContent()) {
+      return new ResponseEntity<Page<InternalApplicantDTO>>(HttpStatus.NOT_FOUND);
     }
 
-    return new ResponseEntity<List<InternalApplicantDTO>>(
-            customers.get(), HttpStatus.OK
-    );
-
+    return new ResponseEntity<>(customers, HttpStatus.OK);
   }
 
   @PostMapping("")
