@@ -40,7 +40,7 @@ class ApplicantController {
 
 
   @PutMapping("")
-  ResponseEntity<InternalApplicantDTO> updateApplicant(@RequestBody Applicant customerData) {
+  ResponseEntity<InternalApplicantDTO> updateApplicant(@RequestBody InternalApplicantDTO customerData) {
     Optional<InternalApplicantDTO> updatedApplicant =
       internalApplicantInterface.updateApplicant(customerData);
 
