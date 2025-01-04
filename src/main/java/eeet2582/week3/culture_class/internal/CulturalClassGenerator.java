@@ -1,5 +1,7 @@
-package eeet2582.week3.culture_class;
+package eeet2582.week3.culture_class.internal;
 
+import eeet2582.week3.culture_class.internal.entity.CulturalClassEntity;
+import eeet2582.week3.culture_class.internal.repository.CulturalClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

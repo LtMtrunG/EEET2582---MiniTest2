@@ -1,21 +1,20 @@
-package eeet2582.week3.applicant.service;
+package eeet2582.week3.applicant.internal.service;
 
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import eeet2582.week3.applicant.entity.Applicant;
+import eeet2582.week3.applicant.internal.entity.Applicant;
 import eeet2582.week3.applicant.external.ExternalApplicantInterface;
 import eeet2582.week3.applicant.internal.InternalApplicantInterface;
 import eeet2582.week3.applicant.internal.dtos.CreateApplicantDTO;
 import eeet2582.week3.applicant.internal.dtos.InternalApplicantDTO;
-import eeet2582.week3.applicant.repository.ApplicantRepository;
+import eeet2582.week3.applicant.internal.repository.ApplicantRepository;
 import eeet2582.week3.helper.JedisHelper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service

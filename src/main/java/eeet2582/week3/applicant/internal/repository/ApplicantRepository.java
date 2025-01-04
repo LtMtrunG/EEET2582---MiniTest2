@@ -1,6 +1,6 @@
-package eeet2582.week3.applicant.repository;
+package eeet2582.week3.applicant.internal.repository;
 
-import eeet2582.week3.applicant.entity.Applicant;
+import eeet2582.week3.applicant.internal.entity.Applicant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

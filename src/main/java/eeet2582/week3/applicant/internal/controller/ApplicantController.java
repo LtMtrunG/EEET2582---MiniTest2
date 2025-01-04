@@ -1,9 +1,7 @@
-package eeet2582.week3.applicant.controller;
+package eeet2582.week3.applicant.internal.controller;
 
-import java.util.List;
 import java.util.Optional;
 
-import eeet2582.week3.applicant.entity.Applicant;
 import eeet2582.week3.applicant.internal.InternalApplicantInterface;
 import eeet2582.week3.applicant.internal.dtos.CreateApplicantDTO;
 import eeet2582.week3.applicant.internal.dtos.InternalApplicantDTO;

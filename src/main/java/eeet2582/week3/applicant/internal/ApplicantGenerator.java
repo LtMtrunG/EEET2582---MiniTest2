@@ -1,9 +1,7 @@
-package eeet2582.week3.applicant;
+package eeet2582.week3.applicant.internal;
 
-import eeet2582.week3.applicant.entity.Applicant;
-import eeet2582.week3.applicant.internal.InternalApplicantInterface;
 import eeet2582.week3.applicant.internal.dtos.CreateApplicantDTO;
-import eeet2582.week3.applicant.repository.ApplicantRepository;
+import eeet2582.week3.applicant.internal.repository.ApplicantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package eeet2582.week3.applicant.entity;
+package eeet2582.week3.applicant.internal.entity;
 
 import java.util.ArrayList;
 import java.util.List;

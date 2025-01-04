@@ -1,6 +1,6 @@
 package eeet2582.week3.applicant.internal.dtos;
 
-import eeet2582.week3.applicant.entity.Applicant;
+import eeet2582.week3.applicant.internal.entity.Applicant;
 import lombok.Getter;
 
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package eeet2582.week3.culture_class;
+package eeet2582.week3.culture_class.internal.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
