@@ -71,45 +71,84 @@ class ApplicantService implements InternalApplicantInterface, ExternalApplicantI
         return new InternalApplicantDTO(savedApplicant);
     }
 
-    public Page<InternalApplicantDTO> getAllApplicants(int pageNo, int pageSize) {
+    public Page<InternalApplicantDTO> getAllApplicants(String keyword, int pageNo, int pageSize) {
 
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("name").ascending());
 
-        Set<String> redisKeys = redisTemplate.keys(APPLICANT_KEY_ID_PREFIX + "*");
+        // Fetch all keys from the hash
+        Map<Object, Object> allKeys = applicantJedisHelper.getHashByKey(APPLICANT_NAME_INDEX);
 
-        List<InternalApplicantDTO> customerList = new ArrayList<>();
-
-        if (redisKeys != null && redisKeys.size() > 0) {
-            // Store the keys in a List
-            Iterator<String> iterator = redisKeys.iterator();
-
-            while (iterator.hasNext()) {
-                String keyStr = iterator.next();
-
-                Applicant customer = (Applicant) redisTemplate
-                        .opsForValue()
-                        .get(keyStr);
-
-                customerList.add(new InternalApplicantDTO(customer));
-            }
+        // Check if there are any keys
+        if (allKeys == null || allKeys.isEmpty()) {
+            return Page.empty(pageable); // Return an empty Page
         }
 
-        if (customerList.isEmpty()) {
-            customerList = destRepository.findAll().stream()
-                    .map(InternalApplicantDTO::new)
+        List<Applicant> applicantList = new ArrayList<>();
+
+        if (!keyword.isEmpty()) {
+            System.out.println("Keyword: " + keyword);
+            // Filter keys based on the keyword
+            applicantList = allKeys.entrySet().stream()
+                    .filter(entry -> entry.getKey().toString().toLowerCase().contains(keyword.toLowerCase()))
+                    .map(entry -> (Applicant) entry.getValue())
+                    .collect(Collectors.toList());
+        } else {
+            applicantList = allKeys.values().stream()
+                    .map(o -> (Applicant) o)
                     .collect(Collectors.toList());
         }
 
-        int start = pageNo * pageSize;
-        int end = Math.min(start + pageSize, customerList.size());
+        List<InternalApplicantDTO> applicantDTOList = applicantList.stream()
+                .map(InternalApplicantDTO::new)
+                .toList();
 
-        if (start >= customerList.size()) {
+        // Pagination logic
+        int start = pageNo * pageSize;
+        int end = Math.min(start + pageSize, applicantDTOList.size());
+
+        if (start >= applicantList.size()) {
             throw new IllegalArgumentException("Invalid page number");
         }
 
-        List<InternalApplicantDTO> paginatedList = customerList.subList(start, end);
+        List<InternalApplicantDTO> paginatedKeys = applicantDTOList.subList(start, end);
 
-        return new PageImpl<>(paginatedList, pageable, customerList.size());
+        return new PageImpl<>(paginatedKeys, pageable, applicantList.size());
+
+//        Set<String> redisKeys = redisTemplate.keys(APPLICANT_KEY_ID_PREFIX + "*");
+//
+//        List<InternalApplicantDTO> customerList = new ArrayList<>();
+//
+//        if (redisKeys != null && redisKeys.size() > 0) {
+//            // Store the keys in a List
+//            Iterator<String> iterator = redisKeys.iterator();
+//
+//            while (iterator.hasNext()) {
+//                String keyStr = iterator.next();
+//
+//                Applicant customer = (Applicant) redisTemplate
+//                        .opsForValue()
+//                        .get(keyStr);
+//
+//                customerList.add(new InternalApplicantDTO(customer));
+//            }
+//        }
+//
+//        if (customerList.isEmpty()) {
+//            customerList = destRepository.findAll().stream()
+//                    .map(InternalApplicantDTO::new)
+//                    .collect(Collectors.toList());
+//        }
+//
+//        int start = pageNo * pageSize;
+//        int end = Math.min(start + pageSize, customerList.size());
+//
+//        if (start >= customerList.size()) {
+//            throw new IllegalArgumentException("Invalid page number");
+//        }
+//
+//        List<InternalApplicantDTO> paginatedList = customerList.subList(start, end);
+//
+//        return new PageImpl<>(paginatedList, pageable, customerList.size());
     }
 
     public Optional<InternalApplicantDTO> updateApplicant(InternalApplicantDTO customerData) {

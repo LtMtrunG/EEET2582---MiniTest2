@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface InternalApplicantInterface {
-    public Page<InternalApplicantDTO> getAllApplicants(int pageNo, int pageSize);
+    public Page<InternalApplicantDTO> getAllApplicants(String keyword, int pageNo, int pageSize);
     public InternalApplicantDTO createApplicant(CreateApplicantDTO applicant);
     public Optional<InternalApplicantDTO> updateApplicant(InternalApplicantDTO customerData);
     public Optional<InternalApplicantDTO> deleteApplicant(Long id);

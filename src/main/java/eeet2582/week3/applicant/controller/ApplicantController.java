@@ -22,9 +22,10 @@ class ApplicantController {
   private InternalApplicantInterface internalApplicantInterface;
 
   @GetMapping
-  ResponseEntity<Page<InternalApplicantDTO>> getAllApplicants(@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+  ResponseEntity<Page<InternalApplicantDTO>> getAllApplicants(@RequestParam(value = "keyword", defaultValue = "", required = false) String keyword,
+                                                              @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
                                                               @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
-    Page<InternalApplicantDTO> customers = internalApplicantInterface.getAllApplicants(pageNo, pageSize);
+    Page<InternalApplicantDTO> customers = internalApplicantInterface.getAllApplicants(keyword, pageNo, pageSize);
 
     if (!customers.hasContent()) {
       return new ResponseEntity<Page<InternalApplicantDTO>>(HttpStatus.NOT_FOUND);
